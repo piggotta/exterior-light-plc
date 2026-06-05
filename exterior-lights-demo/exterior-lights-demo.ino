@@ -1,7 +1,7 @@
 #include <P1AM.h>
 #include <RTCZero.h>
 
-constexpr uint32_t kDebounceMillis = 100;
+constexpr uint32_t kDebounceMillis = 50;
 constexpr uint32_t kOnTimeSec = 60 * 10;
 constexpr uint8_t kInputSlot = 1;
 constexpr uint8_t kOutputSlot = 2;
@@ -66,7 +66,7 @@ class LightController {
     } {}
 
     void Poll(uint32_t unix_time_s) {
-      for (int ind = 1; ind <= kNumSwitches; ind++) {
+      for (int ind = 0; ind < kNumSwitches; ind++) {
         SwitchState state = switches_[ind].Poll();
         if (state == SwitchState::kCloseEvent) {
           Serial.println("Switch press detected");
@@ -90,7 +90,7 @@ class LightController {
         PowerOffAll();
       } else {
         PowerOnAll();
-        deadline_s_ = unix_time_s;
+        deadline_s_ = unix_time_s + kOnTimeSec;
       }
     }
 
